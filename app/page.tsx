@@ -19,7 +19,7 @@ export default async function Home() {
       <div className="flex flex-wrap items-center justify-center md:justify-start p-24 gap-8">
         {sudoku_puzzles.map((p, index) => (
           <Link
-            href={"/" + p.id}
+            href={"puzzle/" + p.id}
             key={p.id}
             className="border rounded hover:bg-sky-700"
           >
