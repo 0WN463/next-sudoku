@@ -49,6 +49,17 @@ const Grid = ({ puzzle }: { puzzle: string }) => {
       }
     }
 
+    const subgridRow = div(div(index, 9), 3) * 3;
+    const subgridCol = div(index % 9, 3) * 3;
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (grid[subgridRow + i][subgridCol + j].value === num) {
+          e.target.setCustomValidity("conflict");
+          return;
+        }
+      }
+    }
+
     e.target.setCustomValidity("");
   };
 
