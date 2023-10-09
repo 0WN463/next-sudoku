@@ -7,12 +7,19 @@ type Cell = {
   value?: number;
 };
 
+const to2D = <T,>(arr: T[]) =>
+  [...Array(9).keys()].map((i) => arr.slice(i * 9, (i + 1) * 9));
+
+const div = (a: number, b: number) => Math.floor(a / b);
+
 const Grid = ({ puzzle }: { puzzle: string }) => {
-  const [state, setState] = useState<Cell>(
+  const [state, setState] = useState<Cell[]>(
     [...puzzle].map((cell) =>
       cell === "." ? { fixed: false } : { fixed: true, value: parseInt(cell) },
     ),
   );
+
+  const grid = to2D(state);
 
   const onChange = (e, index: number) => {
     if (e.target.value === "") {
@@ -26,8 +33,23 @@ const Grid = ({ puzzle }: { puzzle: string }) => {
       return;
     }
 
-    e.target.setCustomValidity("");
     setState(state.with(index, { fixed: false, value: num }));
+
+    for (let i = 0; i < 9; i++) {
+      if (grid[div(index, 9)][i].value === num) {
+        e.target.setCustomValidity("conflict");
+        return;
+      }
+    }
+
+    for (let i = 0; i < 9; i++) {
+      if (grid[i][index % 9].value === num) {
+        e.target.setCustomValidity("conflict");
+        return;
+      }
+    }
+
+    e.target.setCustomValidity("");
   };
 
   return (
