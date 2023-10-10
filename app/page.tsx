@@ -1,13 +1,8 @@
-import { createClient } from "@supabase/supabase-js";
+import supabase from "lib/supabase";
 import Grid from "components/grid_preview";
 import Link from "next/link";
 
 export default async function Home() {
-  // TODO: Extract these
-  const supabaseUrl = process.env.SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_KEY;
-  const supabase = createClient(supabaseUrl, supabaseKey);
-
   const { data: sudoku_puzzles, error } = await supabase
     .from("sudoku_puzzles")
     .select("puzzle,id");
