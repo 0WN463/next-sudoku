@@ -74,6 +74,10 @@ const Grid = ({ puzzle }: { puzzle: string }) => {
     validity.forEach((isValid, i) =>
       inputs.current[i].current.setCustomValidity(isValid ? "" : "conflict"),
     );
+
+    if (validity.every((b) => b) && newState.every((cell) => cell.value)) {
+      alert("🎉Puzzle completed!🎉");
+    }
   };
 
   return (
