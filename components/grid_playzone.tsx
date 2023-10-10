@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 
 type Cell = {
   fixed: boolean;
@@ -12,14 +12,48 @@ const to2D = <T,>(arr: T[]) =>
 
 const div = (a: number, b: number) => Math.floor(a / b);
 
+const validGrid = (grid: Cell[][]) =>
+  [...Array(9 * 9).keys()].map((i) => isValid(grid, i));
+
+const isValid = (grid: Cell[][], index: number) => {
+  const num = grid[div(index, 9)][index % 9].value;
+
+  for (let i = 0; i < 9; i++) {
+    if (i !== index % 9 && grid[div(index, 9)][i].value === num) {
+      return false;
+    }
+  }
+
+  for (let i = 0; i < 9; i++) {
+    if (i !== div(index, 9) && grid[i][index % 9].value === num) {
+      return false;
+    }
+  }
+
+  const subgridRow = div(div(index, 9), 3) * 3;
+  const subgridCol = div(index % 9, 3) * 3;
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (
+        !(subgridRow + i === div(index, 9) && subgridCol + j === index % 9) &&
+        grid[subgridRow + i][subgridCol + j].value === num
+      ) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+};
+
 const Grid = ({ puzzle }: { puzzle: string }) => {
+  const inputs = useRef([...Array(9 * 9)].map(() => React.createRef()));
   const [state, setState] = useState<Cell[]>(
+    // use 1D array for state since it is easier to clone
     [...puzzle].map((cell) =>
       cell === "." ? { fixed: false } : { fixed: true, value: parseInt(cell) },
     ),
   );
-
-  const grid = to2D(state);
 
   const onChange = (e, index: number) => {
     if (e.target.value === "") {
@@ -32,41 +66,21 @@ const Grid = ({ puzzle }: { puzzle: string }) => {
       e.target.setCustomValidity("number out of range");
       return;
     }
+    const newState = state.with(index, { fixed: false, value: num });
+    setState(newState);
 
-    setState(state.with(index, { fixed: false, value: num }));
+    const validity = validGrid(to2D(newState));
 
-    for (let i = 0; i < 9; i++) {
-      if (grid[div(index, 9)][i].value === num) {
-        e.target.setCustomValidity("conflict");
-        return;
-      }
-    }
-
-    for (let i = 0; i < 9; i++) {
-      if (grid[i][index % 9].value === num) {
-        e.target.setCustomValidity("conflict");
-        return;
-      }
-    }
-
-    const subgridRow = div(div(index, 9), 3) * 3;
-    const subgridCol = div(index % 9, 3) * 3;
-    for (let i = 0; i < 3; i++) {
-      for (let j = 0; j < 3; j++) {
-        if (grid[subgridRow + i][subgridCol + j].value === num) {
-          e.target.setCustomValidity("conflict");
-          return;
-        }
-      }
-    }
-
-    e.target.setCustomValidity("");
+    validity.forEach((isValid, i) =>
+      inputs.current[i].current.setCustomValidity(isValid ? "" : "conflict"),
+    );
   };
 
   return (
     <div className="h-64 w-64 bg-black grid-cols-9 grid-rows-9 grid auto-rows-fr auto-cols-fr">
       {state.map(({ fixed, value }, index) => (
         <input
+          ref={inputs.current[index]}
           type="number"
           className="border text-center bg-white text-green-900 invalid:text-red-900 disabled:bg-slate-100 disabled:text-black"
           maxLength="1"

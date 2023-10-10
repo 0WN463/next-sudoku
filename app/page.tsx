@@ -3,6 +3,7 @@ import Grid from "components/grid_preview";
 import Link from "next/link";
 
 export default async function Home() {
+  // TODO: Extract these
   const supabaseUrl = process.env.SUPABASE_URL;
   const supabaseKey = process.env.SUPABASE_KEY;
   const supabase = createClient(supabaseUrl, supabaseKey);
