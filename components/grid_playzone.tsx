@@ -67,6 +67,7 @@ const Grid = ({ puzzle }: { puzzle: string }) => {
     <div className="h-64 w-64 bg-black grid-cols-9 grid-rows-9 grid auto-rows-fr auto-cols-fr">
       {state.map(({ fixed, value }, index) => (
         <input
+          type="number"
           className="border text-center bg-white text-green-900 invalid:text-red-900 disabled:bg-slate-100 disabled:text-black"
           maxLength="1"
           key={index}
