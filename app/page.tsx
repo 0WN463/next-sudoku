@@ -20,7 +20,7 @@ export default async function Home() {
             className="border rounded hover:bg-sky-700"
           >
             <Grid puzzle={p.puzzle} />
-            <span className="flex justify-center">Puzzle #{index}</span>
+            <span className="flex justify-center">Puzzle #{index + 1}</span>
           </Link>
         ))}
       </div>
