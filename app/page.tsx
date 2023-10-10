@@ -13,7 +13,7 @@ export default async function Home() {
     .select("puzzle,id");
 
   return (
-    <main>
+    <main className="lg:h-screen">
       <h1 className="p-4 text-lg flex items-center justify-center">
         Choose a puzzle
       </h1>

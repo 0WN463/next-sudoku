@@ -14,7 +14,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
     .single();
 
   return (
-    <main className="flex justify-center pt-6 flex-col items-center gap-4">
+    <main className="h-screen flex justify-center pt-6 flex-col items-center gap-4">
       <Grid puzzle={data.puzzle} />
       <Link href="/">Back to Home</Link>
     </main>
