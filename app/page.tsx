@@ -1,5 +1,5 @@
-import supabase from "lib/supabase";
-import Grid from "components/grid_preview";
+import supabase from "@lib/supabase";
+import Grid from "@components/grid_preview";
 import Link from "next/link";
 
 export default async function Home() {

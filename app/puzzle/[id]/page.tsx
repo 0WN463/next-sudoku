@@ -1,5 +1,5 @@
-import supabase from "lib/supabase";
-import Grid from "components/grid_playzone";
+import supabase from "@lib/supabase";
+import Grid from "@components/grid_playzone";
 import Link from "next/link";
 
 const Page = async ({ params }: { params: { id: string } }) => {
