@@ -47,7 +47,9 @@ const isValid = (grid: Cell[][], index: number) => {
 };
 
 const Grid = ({ puzzle }: { puzzle: string }) => {
-  const inputs = useRef([...Array(9 * 9)].map(() => React.createRef()));
+  const inputs = useRef<React.RefObject<HTMLInputElement>[]>(
+    [...Array(9 * 9)].map(() => React.createRef()),
+  );
   const [state, setState] = useState<Cell[]>(
     // use 1D array for state since it is easier to clone
     [...puzzle].map((cell) =>
@@ -55,7 +57,7 @@ const Grid = ({ puzzle }: { puzzle: string }) => {
     ),
   );
 
-  const onChange = (e, index: number) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     if (e.target.value === "") {
       setState(state.with(index, { fixed: false }));
       return;
@@ -71,8 +73,11 @@ const Grid = ({ puzzle }: { puzzle: string }) => {
 
     const validity = validGrid(to2D(newState));
 
-    validity.forEach((isValid, i) =>
-      inputs.current[i].current.setCustomValidity(isValid ? "" : "conflict"),
+    validity.forEach(
+      (isValid, i) =>
+        inputs?.current?.[i]?.current?.setCustomValidity(
+          isValid ? "" : "conflict",
+        ),
     );
 
     if (validity.every((b) => b) && newState.every((cell) => cell.value)) {
@@ -87,7 +92,7 @@ const Grid = ({ puzzle }: { puzzle: string }) => {
           ref={inputs.current[index]}
           type="number"
           className="border text-center bg-white text-green-900 invalid:text-red-900 disabled:bg-slate-100 disabled:text-black"
-          maxLength="1"
+          maxLength={1}
           key={index}
           min="1"
           max="9"

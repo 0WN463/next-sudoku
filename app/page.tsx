@@ -13,7 +13,7 @@ export default async function Home() {
         Choose a puzzle
       </h1>
       <div className="flex flex-wrap items-center justify-center md:justify-start p-24 gap-8">
-        {sudoku_puzzles.map((p, index) => (
+        {sudoku_puzzles?.map((p, index) => (
           <Link
             href={"puzzle/" + p.id}
             key={p.id}
@@ -22,7 +22,7 @@ export default async function Home() {
             <Grid puzzle={p.puzzle} />
             <span className="flex justify-center">Puzzle #{index + 1}</span>
           </Link>
-        ))}
+        )) ?? "Loading..."}
       </div>
     </main>
   );
