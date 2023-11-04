@@ -9,7 +9,8 @@ const Page = async ({ params }: { params: { id: string } }) => {
     .eq("id", params.id)
     .single();
 
-  if (!data?.puzzle) return "Loading...";
+  if (error) return <main>Error fetching puzzle</main>;
+  if (!data?.puzzle) return <main>Loading...</main>;
 
   return (
     <main className="h-screen flex justify-center pt-6 flex-col items-center gap-4">

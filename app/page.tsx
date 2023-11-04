@@ -7,6 +7,8 @@ export default async function Home() {
     .from("sudoku_puzzles")
     .select("puzzle,id");
 
+  if (error) return <main>Error fetching puzzles</main>;
+
   return (
     <main className="lg:h-screen">
       <h1 className="p-4 text-lg flex items-center justify-center">
